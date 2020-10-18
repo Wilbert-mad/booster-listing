@@ -1,0 +1,9 @@
+# modules
+node_modules
+package-lock.json
+
+# auth settings
+src/configs.ts
+
+# build
+dist/
