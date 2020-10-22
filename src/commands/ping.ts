@@ -3,7 +3,9 @@ import BaseCommand from '../structures/baseCommand';
 
 class Ping extends BaseCommand {
   constructor() {
-    super('ping');
+    super('ping', {
+      description: 'Bots server ping rate',
+    });
   }
 
   async run(message: Message) {

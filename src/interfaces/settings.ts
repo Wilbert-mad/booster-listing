@@ -5,6 +5,8 @@ interface Settings {
   defaultServerOwner?: boolean,
   // bot owners
   BotOwners?: Snowflake[] | Snowflake;
+  // bot prefix
+  prefix?: string;
 }
 
 export default Settings;

@@ -2,6 +2,8 @@ import { Client, Collection, Message, Snowflake } from 'discord.js';
 import Settings from '../interfaces/settings';
 import RegesterUtils from '../utils/Regesters';
 import BaseCommand from './baseCommand';
+import mongoose from 'mongoose';
+import('./Members');
 
 interface Regesters {
   CommandsRegester: (client: Booster, dir: string) => Promise<void>,
@@ -33,11 +35,30 @@ class Booster extends Client {
     });
 
     this.on('message', (message: Message) => {
+      const prefix: string = this.settings.prefix || '~';
       if (message.author.bot) return;
+
+      const messageArray: string[] = message.content.split(' ');
+      const command: string = messageArray[0];
+      const args: string[] = messageArray.slice(1);
+
+      if (!command.startsWith(prefix)) return;
+
+      const cmd: BaseCommand | undefined = this.commands.get(command.slice(prefix.length)) || 
+        this.commands.get(this.aliases.get(command.slice(prefix.length)) || '');
+
+      if (!cmd) return;
+      else {
+        try {
+          cmd.run(message, args);
+        } catch (e) {
+          console.log(e);
+        }
+      }
     });
   }
 
-  public get owners() {
+  public get owners(): string[] {
     if (Array.isArray(this.settings.BotOwners)) {
       const arr: Snowflake[] = [];
       this.settings.BotOwners.forEach((owner: Snowflake) => {
@@ -55,10 +76,33 @@ class Booster extends Client {
         owner = owner.replace(/s+/g, '');
       }
       return [this.settings.BotOwners];
+    } else {
+      return [];
     }
   }
 
-  public async ready(token: string) {
+  public connect(url: string) {
+    mongoose.connect(url, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
+
+    const db = mongoose.connection;
+
+    db.on('connected', () => {
+      this.emit('dbConnected');
+    });
+
+    db.on('error', (error) => {
+      this.emit('error', (error));
+    });
+
+    db.on('disconnected', () => {
+      this.emit('dbDisconnect');
+    });
+  }
+
+  public async ready(token: string): Promise<void> {
     await this.regester.CommandsRegester(this, '../commands/');
     await super.login(token);
   }

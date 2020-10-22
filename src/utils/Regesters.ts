@@ -13,6 +13,9 @@ async function CommandsRegester(client: Booster, dir: string = '') {
       if (command instanceof BaseCommand) {
         console.log(`${i+1}: ${file.split('.js').join('')} command loaded`);
         client.commands.set(command.name, command);
+        command.aliases.forEach((aliase: string) => {
+          client.aliases.set(aliase, command.name);
+        })
       }
     }
   });
