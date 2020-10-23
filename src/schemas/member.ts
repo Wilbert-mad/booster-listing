@@ -1,4 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 export default model('members', new Schema({
   id: {
@@ -6,10 +6,7 @@ export default model('members', new Schema({
     required: true,
   },
   advertisements: {
-    type: [{
-      type: Types.ObjectId,
-      ref: 'advert',
-    }],
+    type: Array,
     default: []
   },
   advertiser: {
@@ -17,8 +14,3 @@ export default model('members', new Schema({
     default: false
   }
 }));
-// adID: string,
-//     embeded: boolean,
-//     discription: string,
-//     link: string,
-//     img: string

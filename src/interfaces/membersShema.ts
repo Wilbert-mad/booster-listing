@@ -4,4 +4,6 @@ export default interface memberShema {
   id: string,
   advertisements: [advertisementData],
   advertiser: boolean
+
+  save(): Promise<void>;
 }
