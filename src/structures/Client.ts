@@ -3,6 +3,7 @@ import Settings from '../interfaces/settings';
 import RegesterUtils from '../utils/Regesters';
 import BaseCommand from './baseCommand';
 import mongoose from 'mongoose';
+import { REGEX } from '../utils/Constants';
 import('./Members');
 
 interface Regesters {
@@ -63,7 +64,7 @@ class Booster extends Client {
       const arr: Snowflake[] = [];
       this.settings.BotOwners.forEach((owner: Snowflake) => {
         if (owner.includes(' ')) {
-          owner = owner.replace(/s+/g, '');
+          owner = owner.replace(REGEX.SPACING_GLOBAL, '');
           arr.push(owner);
         } else {
           arr.push(owner);
@@ -73,7 +74,7 @@ class Booster extends Client {
     } else if (typeof this.settings.BotOwners == 'string') {
       let owner = this.settings.BotOwners; 
       if (owner.includes(' ')) {
-        owner = owner.replace(/s+/g, '');
+        owner = owner.replace(REGEX.SPACING_GLOBAL, '');
       }
       return [this.settings.BotOwners];
     } else {

@@ -2,6 +2,7 @@ import { Message, MessageReaction, User } from 'discord.js';
 import advertisementData from '../interfaces/advertisementData';
 import memberShema from '../interfaces/membersShema';
 import BaseCommand from '../structures/baseCommand';
+import { REGEX } from '../utils/Constants';
 
 const separatorFyi = '(**FYI**: The \':\' are replaced with a space later but are saved as \':\')';
 const changeElement = (element: string, data: advertisementData, fyi: string = ''): string => {
@@ -46,8 +47,8 @@ class insertAdvert extends BaseCommand {
           const messagePlacer = await message.channel.send('What would you like to name your advertisment? e.g: \`name: <name-here>\`');
           messagePlacer;
           collector.on('collect', async (msg: Message) => {
-            const commandArg = msg.content.split(new RegExp(/\s+/))[0].toLowerCase();
-            const args = msg.content.split(new RegExp(/\s+/)).slice(1);
+            const commandArg = msg.content.split(new RegExp(REGEX.SPACING))[0].toLowerCase();
+            const args = msg.content.split(new RegExp(REGEX.SPACING)).slice(1);
 
             switch (commandArg) {
               case 'name:': {
