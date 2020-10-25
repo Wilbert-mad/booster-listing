@@ -15,7 +15,7 @@ class BaseCommand {
     this.aliases = options.aliases || [];
     this.guildOnly = options.guildOnly || true;
     this.ownerOnly = options.ownerOnly || false;
-    this.usage = options.usage || 'This command has no usage.';
+    this.usage = options.usage || 'Found no usage for this command.';
     this.description = options.description || 'Found no description for this command.';
   }
 
