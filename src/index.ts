@@ -11,3 +11,7 @@ client.ready(Token);
 client.on('dbConnected', () => {
   console.log('DB ready')
 });
+
+console.log(client.utils.createID(0));
+console.log(client.utils.createID(9));
+console.log(client.utils.ResolveName('Name:here:boy'));

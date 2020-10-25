@@ -4,6 +4,7 @@ import RegesterUtils from '../utils/Regesters';
 import BaseCommand from './baseCommand';
 import mongoose from 'mongoose';
 import { REGEX } from '../utils/Constants';
+import Utils from '../utils/Utils';
 import('./Members');
 
 interface Regesters {
@@ -15,6 +16,7 @@ class Booster extends Client {
   public settings: Settings;
   public commands: Collection<string, BaseCommand>;
   public aliases: Collection<string, string>;
+  public utils: Utils
   private regester: Regesters;
 
   constructor(settings: Settings = {}) {
@@ -24,6 +26,8 @@ class Booster extends Client {
     });
 
     this.settings = settings;
+
+    this.utils = new Utils(this);
 
     this.commands = new Collection();
 
@@ -51,7 +55,7 @@ class Booster extends Client {
       if (!cmd) return;
       else {
         try {
-          cmd.run(message, args);
+          cmd.run(this, message, args);
         } catch (e) {
           console.log(e);
         }

@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import CommandOptions from '../interfaces/commandOptions';
+import Booster from './Client';
 
 class BaseCommand {
   public name: string;
@@ -19,7 +20,7 @@ class BaseCommand {
   }
 
   // @ts-ignore
-  run(message: Message, args: string[] ) {
+  run(client: Booster, message: Message, args: string[] ) {
     throw new Error(`\'${this.name}\' has no run function`);
   }
 }

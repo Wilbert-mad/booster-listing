@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import memberShema from '../interfaces/membersShema';
 import BaseCommand from '../structures/baseCommand';
+import Booster from '../structures/Client';
 
 class Bump extends BaseCommand {
   constructor() {
@@ -11,7 +12,7 @@ class Bump extends BaseCommand {
     });
   }
 
-  async run(message: Message, [advertisement]: string[]) {
+  async run(client: Booster, message: Message, [advertisement]: string[]) {
     // @ts-ignore
     const feach: memberShema = await message.member.adData();
     if (feach) {

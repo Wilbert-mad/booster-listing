@@ -2,6 +2,7 @@ import { Message, MessageReaction, User } from 'discord.js';
 import advertisementData from '../interfaces/advertisementData';
 import memberShema from '../interfaces/membersShema';
 import BaseCommand from '../structures/baseCommand';
+import Booster from '../structures/Client';
 import { REGEX } from '../utils/Constants';
 
 const separatorFyi = '(**FYI**: The \':\' are replaced with a space later but are saved as \':\')';
@@ -18,7 +19,7 @@ class insertAdvert extends BaseCommand {
     });
   }
 
-  async run(message: Message) {
+  async run(client: Booster, message: Message) {
     // @ts-ignore
     const feach: memberShema = await message.member.adData();
     if (feach) {
@@ -68,13 +69,10 @@ class insertAdvert extends BaseCommand {
               }
 
               case 'done': {
-                if (feach.advertisements.length <= 0) {
-                  data.adID = '0';
-                  feach.advertisements.push(data);
-                  await feach.save();
-                }
-                console.log(feach.advertisements.length);
-                // console.log(feach.advertisements.find(ad => ad.adID == '0'));
+                const newID = client.utils.createID(feach.advertisements.length);
+                data.adID = newID;
+                feach.advertisements.push(data);
+                await feach.save();
                 await messagePlacer.edit('Content hase been saved to database.');
                 collector.stop();
                 break;

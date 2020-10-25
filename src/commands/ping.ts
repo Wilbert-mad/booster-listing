@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import BaseCommand from '../structures/baseCommand';
+import Booster from '../structures/Client';
 
 class Ping extends BaseCommand {
   constructor() {
@@ -8,7 +9,7 @@ class Ping extends BaseCommand {
     });
   }
 
-  async run(message: Message) {
+  async run(client: Booster, message: Message) {
     const startTime = Date.now();
     await message.channel.send('Pinging...').then(async (msg: Message) => {
       const endTime = Date.now();
