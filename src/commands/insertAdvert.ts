@@ -69,7 +69,10 @@ class insertAdvert extends BaseCommand {
               }
 
               case 'done': {
+                let includent = true;
                 const newID = client.utils.createID(feach.advertisements.length);
+                feach.advertisements.forEach(ad => ad.adID === newID ? includent = true : includent = false);
+                if (includent) return messagePlacer.edit('There was in error trying to create an ID for this advert try again.');
                 data.adID = newID;
                 feach.advertisements.push(data);
                 await feach.save();
