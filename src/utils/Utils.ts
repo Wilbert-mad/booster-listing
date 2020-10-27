@@ -8,7 +8,7 @@ class Utils {
     this.client = client;
   }
 
-  async ResolveAdvertisement(data: advertisementData): Promise<Object> {
+  ResolveAdvertisement(data: advertisementData): Object {
     return new MessageEmbed()
       .setAuthor(this.ResolveName(data.name), data.img ? data.img : '')
       .setDescription(data.discription || 'This hase no discription available!')
