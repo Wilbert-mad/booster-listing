@@ -23,18 +23,19 @@ class insertAdvert extends BaseCommand {
     // @ts-ignore
     const feach: memberShema = await message.member.adData();
     if (feach) {
-      const msgQuestin: Message = await message.channel.send('Would you like to continue creating a new advertisment?');
+      const messagePlacer: Message = await message.channel.send('Would you like to continue creating a new advertisment?');
 
       // set reactions 
-      await msgQuestin.react('✔');
-      await msgQuestin.react('❌');
+      await messagePlacer.react('✔');
+      await messagePlacer.react('❌');
       // get first reaction
-      const collected = await msgQuestin.awaitReactions((reaction: MessageReaction, user: User) => !user.bot, {
+      const collected = await messagePlacer.awaitReactions((reaction: MessageReaction, user: User) => !user.bot, {
         errors: ['time'],
         time: 15000,
         max: 1,
       });
 
+      await messagePlacer.reactions.removeAll();
       const firstInCollection = collected.first();
       if (firstInCollection) {
         if (firstInCollection.emoji.name == '✔') {
@@ -43,10 +44,9 @@ class insertAdvert extends BaseCommand {
             embeded: false,
             discription: '',
             name: '',
-            adID: ''
+            adID: '',
           }
-          const messagePlacer = await message.channel.send('What would you like to name your advertisment? e.g: \`name: <name-here>\`');
-          messagePlacer;
+          await messagePlacer.edit('What would you like to name your advertisment? e.g: \`name: <name-here>\`');
           collector.on('collect', async (msg: Message) => {
             const commandArg = msg.content.split(new RegExp(REGEX.SPACING))[0].toLowerCase();
             const args = msg.content.split(new RegExp(REGEX.SPACING)).slice(1);
@@ -71,8 +71,16 @@ class insertAdvert extends BaseCommand {
               case 'done': {
                 let includent = true;
                 const newID = client.utils.createID(feach.advertisements.length);
-                feach.advertisements.forEach(ad => ad.adID === newID ? includent = true : includent = false);
-                if (includent) return messagePlacer.edit('There was in error trying to create an ID for this advert try again.');
+                feach.advertisements.forEach(ad => {
+                  if (ad.adID !== newID)
+                   includent = false;
+                  else includent = true;
+                });
+                if (feach.advertisements.length <= 0) includent = false;
+                if (includent && feach.advertisements.length >= 1) {
+                  collector.stop();
+                  return messagePlacer.edit('There was in error trying to create an ID for this advert try again.');
+                }
                 data.adID = newID;
                 feach.advertisements.push(data);
                 await feach.save();

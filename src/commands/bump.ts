@@ -12,12 +12,20 @@ class Bump extends BaseCommand {
     });
   }
 
-  async run(client: Booster, message: Message, [advertisement]: string[]) {
+  async run(client: Booster, message: Message, args: string[]) {
     // @ts-ignore
     const feach: memberShema = await message.member.adData();
     if (feach) {
-      if (advertisement && feach.advertisements.length > 0) {
-        return await message.channel.send(`${feach}`, { code: 'js' });
+      if (feach.advertisements.length >= 1) {
+        if (!args[0]) return await message.channel.send({ embed: {
+          description: 'You didn\'t mention an advertisement'
+        }});
+        try {
+          const advertisementID = parseInt(args[0]).toString();
+          const advert = feach.advertisements.find(ad => ad.adID == advertisementID);
+        } catch(e) {
+          const advert = feach.advertisements.find(ad => ad.name == args.join(':'));
+        }
       } else {
         return await message.channel.send({ embed: {
           description: 'You currently don\'t have any Advertisments in you profile'
